@@ -85,4 +85,4 @@ const format = require('pg-format');
         await db.query(commentStr);
 };
 
-module.exports = seed;
+module.exports = {seed};
