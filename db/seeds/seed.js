@@ -37,7 +37,25 @@ const format = require('pg-format');
   review_id INT REFERENCES reviews(review_id),
   votes INT DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  body VARCHAR);`)
+  body VARCHAR);`);
+  const categoryStr = format(
+  `INSERT INTO categories (
+  slug,
+  description
+  ) VALUES %L RETURNING *`, categoryData.map((categories) => {
+    return [categories.slug, categories.description]
+  }));
+  await db.query(categoryStr);
+
+  const userStr = format(
+    `INSERT INTO users (
+    username,
+    avatar_url,
+    name
+    ) VALUES %L RETURNING *`, userData.map((users) => {
+      return [users.username, users.avatar_url, users.name]
+    }));
+    await db.query(userStr);
 };
 
 module.exports = seed;
