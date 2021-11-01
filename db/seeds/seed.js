@@ -42,20 +42,47 @@ const format = require('pg-format');
   `INSERT INTO categories (
   slug,
   description
-  ) VALUES %L RETURNING *`, categoryData.map((categories) => {
+  ) VALUES %L RETURNING *;`, categoryData.map((categories) => {
     return [categories.slug, categories.description]
   }));
   await db.query(categoryStr);
 
   const userStr = format(
     `INSERT INTO users (
-    username,
-    avatar_url,
-    name
-    ) VALUES %L RETURNING *`, userData.map((users) => {
+      username,
+      avatar_url,
+      name
+    ) VALUES %L RETURNING *;`, userData.map((users) => {
       return [users.username, users.avatar_url, users.name]
     }));
     await db.query(userStr);
+
+    const reviewStr = format(
+      `INSERT INTO reviews (
+        title,
+        review_body,
+        designer,
+        review_img_url,
+        votes,
+        category,
+        owner,
+        created_at
+      ) VALUES %L RETURNING *;`, reviewData.map((reviews) => {
+        return [reviews.title, reviews.review_body, reviews.designer, reviews.review_img_url, reviews.votes, reviews.category, reviews.owner, reviews.created_at]
+      }));
+      await db.query(reviewStr);
+
+      const commentStr = format(
+        `INSERT INTO comments (
+          author,
+          review_id,
+          votes,
+          created_at,
+          body
+        ) VALUES %L RETURNING *;`, commentData.map((comments) => {
+          return [comments.author, comments.review_id, comments.votes, comments.created_at, comments.body]
+        }));
+        await db.query(commentStr);
 };
 
 module.exports = seed;
