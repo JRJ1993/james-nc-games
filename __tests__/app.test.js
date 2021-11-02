@@ -88,3 +88,65 @@ describe('Get', () => {
     });
     
 });
+
+describe('Patch', () => {
+    test('should update the review with the given info', () => {
+        let update = {inc_votes: 2};
+        return request(app)
+        .patch('/api/reviews/1')
+        .send(update)
+        .expect(200)
+        .then (({body}) => {
+            console.log(body.reviews.votes)
+            expect(body.reviews.votes).toBe(3);
+        })
+    });
+
+    test('should test the bad path if an invalid input is used', () => {
+        let update = {inc_votes: 'sandwich'};
+        return request(app)
+        .patch('/api/reviews/1')
+        .send(update)
+        .expect(400)
+        .then (({body}) => {
+            console.log(body.msg)
+            expect(body.msg).toBe('this input is invalid');
+        })
+    });
+
+    test('should test the bad path if an invalid input is used', () => {
+        let update = {inc_vtes: 5};
+        return request(app)
+        .patch('/api/reviews/1')
+        .send(update)
+        .expect(400)
+        .then (({body}) => {
+            console.log(body)
+            expect(body.msg).toBe('this input is invalid');
+        })
+    });
+
+    test('should test the bad path if an invalid input is used', () => {
+        let update = {inc_votes: 5};
+        return request(app)
+        .patch('/api/reviews/999')
+        .send(update)
+        .expect(404)
+        .then (({body}) => {
+            console.log(body)
+            expect(body.msg).toBe('review not found');
+        })
+    });
+
+    test('should test the bad path if an invalid input is used', () => {
+        let update = {inc_votes: 5};
+        return request(app)
+        .patch('/api/reviews/sand')
+        .send(update)
+        .expect(400)
+        .then (({body}) => {
+            console.log(body)
+            expect(body.msg).toBe('Invalid request');
+        })
+    });
+});
