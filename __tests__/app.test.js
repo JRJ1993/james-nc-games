@@ -7,7 +7,7 @@ const app = require('../app')
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe('Get the categories', () => {
+describe('Get', () => {
     test('should test the happy path for getting the categories', () => {
         return request(app)
         .get('/api/categories')
@@ -35,7 +35,6 @@ describe('Get the categories', () => {
         .get('/api/reviews/1')
         .expect(200)
         .then(({body}) => {
-            console.log(body)
             expect(body.reviews.length).toBe(1);
         })
     });
@@ -55,8 +54,36 @@ describe('Get the categories', () => {
                 review_body: 'Farmyard fun!',
                 category: 'euro game',
                 created_at: '2021-01-18T10:00:20.514Z',
-                votes: 1
+                votes: 1,
+                comment_count: "0"
               });
+        })
+    });
+
+    test('should test the bad path for when something is misspelt', () => {
+        return request(app)
+        .get('/api/reviws/1')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("Route not found");
+        })
+    });
+
+    test('should test the bad path for when a valid input is put in but with no thing', () => {
+        return request(app)
+        .get('/api/reviews/99')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("review not found");
+        })
+    });
+
+    test('should test the bad path for when a valid input is put in but with no thing', () => {
+        return request(app)
+        .get('/api/reviews/smell')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Invalid request");
         })
     });
     

@@ -4,11 +4,12 @@ const {
 } = require('../models/reviews.model');
 
 
-exports.getReviews = (req, res) => {
+exports.getReviews = (req, res, next) => {
     let id = (req.params.review_id);
     fetchReviews(id)
     .then((reviews) => {
         res.status(200).send({reviews});
     })
+    .catch(next)
     
 }

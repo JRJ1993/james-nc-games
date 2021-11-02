@@ -3,6 +3,6 @@ const categoryRouter = require('./category.router');
 const reviewsRouter = require('./reviews.router');
 
 apiRouter.use("/categories", categoryRouter);
-apiRouter.use("/reviews/", reviewsRouter);
+apiRouter.use("/reviews", reviewsRouter);
 
 module.exports = apiRouter;
