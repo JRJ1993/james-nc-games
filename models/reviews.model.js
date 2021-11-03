@@ -3,24 +3,19 @@ const db = require('../db/connection')
 exports.fetchReviews = async (id) => {
     let queryStr = `SELECT * FROM reviews`;
     let queryArr = []
-    let noComments = await db.query('SELECT COUNT(review_id) FROM comments WHERE review_id = $1', [id])
-        
+    let noComments = await db.query('SELECT COUNT(review_id) FROM comments WHERE review_id = $1', [id])      
     if (id) {
         queryStr += ` WHERE review_id = $1`
         queryArr.push(id);
-
     }
-        
     let review = await db.query(queryStr, queryArr)
-
     if (review.rows.length === 0 && id !== undefined) {
         const result = await db.query('SELECT * FROM reviews WHERE review_id = $1', [id])
         if (result.rows.length === 0) {
             return Promise.reject({status:404, msg:'review not found'})
         }
     }
-
-    review.rows[0].comment_count = noComments.rows[0].count
+    review.rows[0].comment_count = noComments.rows[0].count 
     return review.rows
 }
 
@@ -35,7 +30,6 @@ exports.updateReviews = async (id, updates) => {
             return Promise.reject({status:404, msg:'review not found'})
         }
     }
-    console.log(id, updates)
 
     let currentVote = await db.query(`SELECT votes FROM reviews WHERE review_id = $1`, [id.review_id]);
     let newVotes = currentVote.rows[0].votes + updates.inc_votes;
@@ -45,4 +39,19 @@ exports.updateReviews = async (id, updates) => {
 
     return updateVotes.rows[0];
 
+}
+
+exports.fetchAllReviews = async (order_by = 'created_at', order = 'ASC', category) => {
+    let queryStr = `SELECT * FROM reviews`
+    if (category !== undefined) {
+        queryStr += ` WHERE category = '${category}'`
+    }
+    queryStr += ` ORDER BY ${order_by} ${order}`
+    let allReviews = await db.query(queryStr);
+    for (let i = 0; i < allReviews.rows.length; i++) {
+        let noComments = await db.query('SELECT COUNT(review_id) FROM comments WHERE review_id = $1', [allReviews.rows[i].review_id]);
+        allReviews.rows[i].comment_count = noComments.rows[0].count;
+    }
+
+    return allReviews.rows;
 }

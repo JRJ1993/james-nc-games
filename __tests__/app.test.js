@@ -86,6 +86,128 @@ describe('Get', () => {
             expect(body.msg).toBe("Invalid request");
         })
     });
+
+    test('should test the good path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews')
+        .expect(200)
+        .then(({body}) => {
+            body.reviews.forEach((review) => {
+                expect(review).toMatchObject(
+                {   review_id: expect.any(Number),
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url:
+                    expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                  }
+            );
+        })
+    })
+    });
+
+    test('should test the good path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews/?order_by=owner')
+        .expect(200)
+        .then(({body}) => {
+            body.reviews.forEach((review) => {
+                expect(review).toMatchObject(
+                {   review_id: expect.any(Number),
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url:
+                    expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                  }
+            );
+        })
+    })
+    });
+
+    test('should test the good path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews/?order_by=owner&order=asc')
+        .expect(200)
+        .then(({body}) => {
+            body.reviews.forEach((review) => {
+                expect(review).toMatchObject(
+                {   review_id: expect.any(Number),
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url:
+                    expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                  }
+            );
+        })
+    })
+    });
+
+    test('should test the good path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews/?category=dexterity')
+        .expect(200)
+        .then(({body}) => {
+            body.reviews.forEach((review) => {
+                expect(review).toMatchObject(
+                {   review_id: expect.any(Number),
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url:
+                    expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                  }
+            );
+        })
+    })
+    });
+    
+    test('should test the good path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews/?order_by=owner&order=desc&category=dexterity')
+        .expect(200)
+        .then(({body}) => {
+            body.reviews.forEach((review) => {
+                expect(review).toMatchObject(
+                {   review_id: expect.any(Number),
+                    title: expect.any(String),
+                    designer: expect.any(String),
+                    owner: expect.any(String),
+                    review_img_url:
+                    expect.any(String),
+                    review_body: expect.any(String),
+                    category: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    comment_count: expect.any(String)
+                  }
+            );
+        })
+    })
+    });
+
+    
     
 });
 
@@ -97,7 +219,6 @@ describe('Patch', () => {
         .send(update)
         .expect(200)
         .then (({body}) => {
-            console.log(body.reviews.votes)
             expect(body.reviews.votes).toBe(3);
         })
     });
@@ -109,7 +230,6 @@ describe('Patch', () => {
         .send(update)
         .expect(400)
         .then (({body}) => {
-            console.log(body.msg)
             expect(body.msg).toBe('this input is invalid');
         })
     });
@@ -121,7 +241,6 @@ describe('Patch', () => {
         .send(update)
         .expect(400)
         .then (({body}) => {
-            console.log(body)
             expect(body.msg).toBe('this input is invalid');
         })
     });
@@ -133,7 +252,6 @@ describe('Patch', () => {
         .send(update)
         .expect(404)
         .then (({body}) => {
-            console.log(body)
             expect(body.msg).toBe('review not found');
         })
     });
@@ -145,7 +263,6 @@ describe('Patch', () => {
         .send(update)
         .expect(400)
         .then (({body}) => {
-            console.log(body)
             expect(body.msg).toBe('Invalid request');
         })
     });
