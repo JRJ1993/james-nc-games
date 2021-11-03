@@ -241,14 +241,25 @@ describe('Get', () => {
         })
     });
 
-    test('should test the bad path for when something is misspelt', () => {
+    test('should test the good path for getting a review', () => {
         return request(app)
-        .get('/api/reviews?order=snad')
-        .expect(400)
+        .get('/api/reviews/2/comments')
+        .expect(200)
         .then(({body}) => {
-            expect(body.msg).toBe("Invalid order input");
+            body.reviews.forEach((review) => {
+                expect(review).toMatchObject(
+                {   comment_id: expect.any(Number),
+                    body: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    author: expect.any(String)
+                  }
+            );
         })
+    })
     });
+
+
 
     
     

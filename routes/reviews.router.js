@@ -1,5 +1,6 @@
 const reviewsRouter = require('express').Router();
-const {getReviews, patchReviews, getAllReviews, getReviewComments} = require('../controllers/reviews.controller')
+const {getReviews, patchReviews, getAllReviews} = require('../controllers/reviews.controller');
+const {getReviewComments} = require('../controllers/comments.controller')
 
 reviewsRouter.route('/')
 .get(getAllReviews);

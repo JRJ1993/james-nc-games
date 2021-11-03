@@ -45,8 +45,7 @@ exports.fetchAllReviews = async (order_by = 'created_at', order = 'DESC', catego
     if (order !== 'ASC' && order !== 'DESC' ) {
         return Promise.reject({status:400, msg: 'Invalid order input'})
     }
-    console.log(req)
-    console.log(Object.keys(req).length !== 0, !req.hasOwnProperty('order_by'), !req.hasOwnProperty('order'), !req.hasOwnProperty('category'))
+
     if (Object.keys(req).length !== 0 && !req.hasOwnProperty('order_by') && !req.hasOwnProperty('order') && !req.hasOwnProperty('category')) {
         return Promise.reject({status: 400, msg: 'there is nothing for that query'})
     }
@@ -68,8 +67,4 @@ exports.fetchAllReviews = async (order_by = 'created_at', order = 'DESC', catego
     }
 
     return allReviews.rows;
-}
-
-exports.fetchAllReviewComments = async (id) => {
-
 }
