@@ -41,17 +41,35 @@ exports.updateReviews = async (id, updates) => {
 
 }
 
-exports.fetchAllReviews = async (order_by = 'created_at', order = 'ASC', category) => {
+exports.fetchAllReviews = async (order_by = 'created_at', order = 'DESC', category, req) => {
+    if (order !== 'ASC' && order !== 'DESC' ) {
+        return Promise.reject({status:400, msg: 'Invalid order input'})
+    }
+    console.log(req)
+    console.log(Object.keys(req).length !== 0, !req.hasOwnProperty('order_by'), !req.hasOwnProperty('order'), !req.hasOwnProperty('category'))
+    if (Object.keys(req).length !== 0 && !req.hasOwnProperty('order_by') && !req.hasOwnProperty('order') && !req.hasOwnProperty('category')) {
+        return Promise.reject({status: 400, msg: 'there is nothing for that query'})
+    }
+
     let queryStr = `SELECT * FROM reviews`
     if (category !== undefined) {
         queryStr += ` WHERE category = '${category}'`
     }
     queryStr += ` ORDER BY ${order_by} ${order}`
+
     let allReviews = await db.query(queryStr);
+
+    if (allReviews.rows.length === 0) {
+        return Promise.reject({status:400, msg: 'there is nothing for that query'})
+    }
     for (let i = 0; i < allReviews.rows.length; i++) {
         let noComments = await db.query('SELECT COUNT(review_id) FROM comments WHERE review_id = $1', [allReviews.rows[i].review_id]);
         allReviews.rows[i].comment_count = noComments.rows[0].count;
     }
 
     return allReviews.rows;
+}
+
+exports.fetchAllReviewComments = async (id) => {
+
 }

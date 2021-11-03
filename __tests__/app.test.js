@@ -207,6 +207,49 @@ describe('Get', () => {
     })
     });
 
+    test('should test the bad path for when something is misspelt', () => {
+        return request(app)
+        .get('/api/reviws?order_by=owner')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe("Route not found");
+        })
+    });
+
+    test('should test the bad path for when something is misspelt', () => {
+        return request(app)
+        .get('/api/reviews?orde_f=jim')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("there is nothing for that query");
+        })
+    });
+    test('should test the bad path for when something is misspelt', () => {
+        return request(app)
+        .get('/api/reviews?order_by=stu')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Invalid request");
+        })
+    });
+    test('should test the bad path for when something is misspelt', () => {
+        return request(app)
+        .get('/api/reviews?category=snad')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("there is nothing for that query");
+        })
+    });
+
+    test('should test the bad path for when something is misspelt', () => {
+        return request(app)
+        .get('/api/reviews?order=snad')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toBe("Invalid order input");
+        })
+    });
+
     
     
 });
@@ -267,3 +310,5 @@ describe('Patch', () => {
         })
     });
 });
+
+

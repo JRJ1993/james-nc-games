@@ -15,13 +15,14 @@ exports.getReviews = (req, res, next) => {
 }
 
 exports.getAllReviews = (req, res, next) => {
+
     let query = req.query.order_by;
     let order;
     if (req.query.order) {
         order = req.query.order.toUpperCase();
     }
     let category = req.query.category;
-    fetchAllReviews(query, order, category)
+    fetchAllReviews(query, order, category, req.query )
     .then((reviews) => {
         res.status(200).send({reviews})
     })
