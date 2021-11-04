@@ -259,6 +259,38 @@ describe('Get', () => {
     })
     });
 
+    test('should test the bad path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews/99/comments')
+        .expect(404)
+        .then(({body}) => {
+            console.log(body)
+            expect(body).toEqual({msg:'review input must be a valid number'});
+        })
+    })
+
+    test('should test the bad path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews/1/coments')
+        .expect(404)
+        .then(({body}) => {
+            console.log(body)
+            expect(body).toEqual({msg:'Route not found'});
+        })
+    });
+
+    test('should test the bad path for getting a review', () => {
+        return request(app)
+        .get('/api/reviews/bub/comments')
+        .expect(400)
+        .then(({body}) => {
+            console.log(body)
+            expect(body).toEqual({msg:'review input must be in the form of a valid number'});
+        })
+    });
+
+    
+
 
 
     
@@ -318,6 +350,23 @@ describe('Patch', () => {
         .expect(400)
         .then (({body}) => {
             expect(body.msg).toBe('Invalid request');
+        })
+    });
+});
+
+describe.only('Post', () => {
+    test('should show the good path works', () => {
+        let newComment = {
+            username: "mallionaire",
+            body: "I am great at this game so it must be amazing as i dont play bad games that i suck at."
+        };
+        return request(app)
+        .post('/api/reviews/1/comments')
+        .send(newComment)
+        .expect(201)
+        .then (({body}) => {
+            console.log(body.comment.rows)
+            expect(body.comments.length).toBe(4)
         })
     });
 });
