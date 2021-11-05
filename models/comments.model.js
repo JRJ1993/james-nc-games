@@ -10,9 +10,7 @@ exports.fetchAllReviewComments = async (id) => {
         queryStr += ` WHERE review_id = $1`;
         queryArr.push(id)
     }
-
     let comments = await db.query(queryStr, queryArr);
-
     if (comments.rows.length === 0 && id !== undefined) {
         const result = await db.query('SELECT comment_id, votes, created_at, author, body FROM comments WHERE review_id = $1', [id])
         if (result.rows.length === 0) {
@@ -28,12 +26,9 @@ exports.addCommentToReview = async (id, username, comment) => {
 }
 
 exports.removeComment = async (id) => {
-    console.log(isNaN(id))
     if(isNaN(id)) {
         return Promise.reject({status:400, msg:'review input must be in the form of a valid number'})
     } 
-
-    console.log(id);
     let comment = await db.query('DELETE FROM comments WHERE comment_id = $1', [id])
     return comment;
 }

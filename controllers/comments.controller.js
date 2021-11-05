@@ -25,7 +25,6 @@ exports.postReviewComment = (req, res, next) => {
 }
 
 exports.deleteComment = (req, res, next) => {
-    console.log(req.params)
     let id = req.params.comment_id
     removeComment(id)
     .then(() => {

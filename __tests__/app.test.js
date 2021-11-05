@@ -30,7 +30,7 @@ describe('Get', () => {
         })
     });
 
-    test('should test the good path for getting a review by id', () => {
+    test('should test the good path for getting a review by id showing that only one review returns', () => {
         return request(app)
         .get('/api/reviews/1')
         .expect(200)
@@ -69,7 +69,7 @@ describe('Get', () => {
         })
     });
 
-    test('should test the bad path for when a valid input is put in but with no thing', () => {
+    test('should test the bad path for when a valid input is put in but with no review associated', () => {
         return request(app)
         .get('/api/reviews/99')
         .expect(404)
@@ -78,7 +78,7 @@ describe('Get', () => {
         })
     });
 
-    test('should test the bad path for when a valid input is put in but with no thing', () => {
+    test('should test the bad path for when an invalid input is put in', () => {
         return request(app)
         .get('/api/reviews/smell')
         .expect(400)
@@ -87,7 +87,7 @@ describe('Get', () => {
         })
     });
 
-    test('should test the good path for getting a review', () => {
+    test('should test the good path for getting the reviews in the correct formate', () => {
         return request(app)
         .get('/api/reviews')
         .expect(200)
@@ -111,7 +111,7 @@ describe('Get', () => {
     })
     });
 
-    test('should test the good path for getting a review', () => {
+    test('should test the good path with the query of order_by showing the reviews in the correct formate', () => {
         return request(app)
         .get('/api/reviews/?order_by=owner')
         .expect(200)
@@ -135,7 +135,7 @@ describe('Get', () => {
     })
     });
 
-    test('should test the good path for getting a review', () => {
+    test('should test the good path for getting a review with 2 queries of order_by and order in the correct formate', () => {
         return request(app)
         .get('/api/reviews/?order_by=owner&order=asc')
         .expect(200)
@@ -159,7 +159,7 @@ describe('Get', () => {
     })
     });
 
-    test('should test the good path for getting a review', () => {
+    test('should test the good path for getting a review with the query of category returning in the correct formate', () => {
         return request(app)
         .get('/api/reviews/?category=dexterity')
         .expect(200)
@@ -183,7 +183,7 @@ describe('Get', () => {
     })
     });
     
-    test('should test the good path for getting a review', () => {
+    test('should test the good path for getting all the reviews that fit all the queries', () => {
         return request(app)
         .get('/api/reviews/?order_by=owner&order=desc&category=dexterity')
         .expect(200)
@@ -207,7 +207,7 @@ describe('Get', () => {
     })
     });
 
-    test('should test the bad path for when something is misspelt', () => {
+    test('should test the bad path for when reviews is misspelt', () => {
         return request(app)
         .get('/api/reviws?order_by=owner')
         .expect(404)
@@ -216,7 +216,7 @@ describe('Get', () => {
         })
     });
 
-    test('should test the bad path for when something is misspelt', () => {
+    test('should test the bad path for when one of the queries is misspelt', () => {
         return request(app)
         .get('/api/reviews?orde_f=jim')
         .expect(400)
@@ -224,7 +224,7 @@ describe('Get', () => {
             expect(body.msg).toBe("there is nothing for that query");
         })
     });
-    test('should test the bad path for when something is misspelt', () => {
+    test('should test the bad path for when order query is an invalid input', () => {
         return request(app)
         .get('/api/reviews?order_by=stu')
         .expect(400)
@@ -232,7 +232,7 @@ describe('Get', () => {
             expect(body.msg).toBe("Invalid request");
         })
     });
-    test('should test the bad path for when something is misspelt', () => {
+    test('should test the bad path for when category has an invalid input', () => {
         return request(app)
         .get('/api/reviews?category=snad')
         .expect(400)
@@ -241,7 +241,7 @@ describe('Get', () => {
         })
     });
 
-    test('should test the good path for getting a review', () => {
+    test('should test the good path for getting a reviews comments', () => {
         return request(app)
         .get('/api/reviews/2/comments')
         .expect(200)
@@ -259,7 +259,7 @@ describe('Get', () => {
     })
     });
 
-    test('should test the bad path for getting a review', () => {
+    test('should test the bad path for getting a review if the params is valid but has no review associated', () => {
         return request(app)
         .get('/api/reviews/99/comments')
         .expect(404)
@@ -268,7 +268,7 @@ describe('Get', () => {
         })
     })
 
-    test('should test the bad path for getting a review', () => {
+    test('should test the bad path for getting a review if comments is misspelt', () => {
         return request(app)
         .get('/api/reviews/1/coments')
         .expect(404)
@@ -277,7 +277,7 @@ describe('Get', () => {
         })
     });
 
-    test('should test the bad path for getting a review', () => {
+    test('should test the bad path for getting a review if the param is an invalid input', () => {
         return request(app)
         .get('/api/reviews/bub/comments')
         .expect(400)
@@ -310,7 +310,7 @@ describe('Patch', () => {
         })
     });
 
-    test('should test the bad path if an invalid input is used', () => {
+    test('should test the bad path if a valid input is used but inc_votes is misspelt', () => {
         let update = {inc_vtes: 5};
         return request(app)
         .patch('/api/reviews/1')
@@ -321,7 +321,7 @@ describe('Patch', () => {
         })
     });
 
-    test('should test the bad path if an invalid input is used', () => {
+    test('should test the bad path if a valid input is used but no information is associated', () => {
         let update = {inc_votes: 5};
         return request(app)
         .patch('/api/reviews/999')
@@ -345,7 +345,7 @@ describe('Patch', () => {
 });
 
 describe('Post', () => {
-    test('should show the good path works', () => {
+    test('should show the good path will add the new comment in the correct formate', () => {
         let newComment = {
             username: "mallionaire",
             body: "I am great at this game so it must be amazing as i dont play bad games that i suck at."
@@ -367,7 +367,7 @@ describe('Post', () => {
         })
     });
 
-    test('should show the bad path works', () => {
+    test('should show the bad path throws an error if comments is misspelt', () => {
         let newComment = {
             username: "mallionaire",
             body: "I am great at this game so it must be amazing as i dont play bad games that i suck at."
@@ -382,7 +382,7 @@ describe('Post', () => {
         })
     });
 
-    test('should show the bad path works', () => {
+    test('should show the bad path if a valid input is used for review_id but nothing is associated', () => {
         let newComment = {
             username: "mallionaire",
             body: "I am great at this game so it must be amazing as i dont play bad games that i suck at."
@@ -408,7 +408,7 @@ describe('Delete', () => {
         })
     });
 
-    test('should delete a comment', () => {
+    test('should throw an error if comments is misspelt', () => {
         return request(app)
         .delete('/api/commets/1')
         .expect(404)
@@ -417,7 +417,7 @@ describe('Delete', () => {
         })
     });
 
-    test('should delete a comment', () => {
+    test('should throw an error if an invalid input is used for the comment_id', () => {
         return request(app)
         .delete('/api/comments/bad')
         .expect(400)

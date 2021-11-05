@@ -2,8 +2,6 @@ const {
     fetchReviews,
     updateReviews,
     fetchAllReviews,
-    fetchAllReviewComments
-
 } = require('../models/reviews.model');
 
 exports.getReviews = (req, res, next) => {
