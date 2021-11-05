@@ -1,7 +1,6 @@
 const db = require('../db/connection');
 
 exports.fetchAllReviewComments = async (id) => {
-    console.log(isNaN(id))
     if(isNaN(id)) {
         return Promise.reject({status:400, msg:'review input must be in the form of a valid number'})
     }
@@ -13,7 +12,6 @@ exports.fetchAllReviewComments = async (id) => {
     }
 
     let comments = await db.query(queryStr, queryArr);
-    console.log(comments.rows, id)
 
     if (comments.rows.length === 0 && id !== undefined) {
         const result = await db.query('SELECT comment_id, votes, created_at, author, body FROM comments WHERE review_id = $1', [id])
@@ -25,7 +23,17 @@ exports.fetchAllReviewComments = async (id) => {
 }
 
 exports.addCommentToReview = async (id, username, comment) => {
-    console.log(id, username, comment)
     let addComment  = await db.query('INSERT INTO comments (author, body, review_id) VALUES ($1, $2, $3) RETURNING*;', [username, comment, id])
     return addComment
+}
+
+exports.removeComment = async (id) => {
+    console.log(isNaN(id))
+    if(isNaN(id)) {
+        return Promise.reject({status:400, msg:'review input must be in the form of a valid number'})
+    } 
+
+    console.log(id);
+    let comment = await db.query('DELETE FROM comments WHERE comment_id = $1', [id])
+    return comment;
 }

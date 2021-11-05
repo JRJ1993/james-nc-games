@@ -1,5 +1,5 @@
-describe.skip('Name of the group', () => {
-    test.skip('should ', () => {
+describe('Name of the group', () => {
+    test('should ', () => {
         
     });
 });

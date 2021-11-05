@@ -1,10 +1,10 @@
 const {
     fetchAllReviewComments,
-    addCommentToReview
+    addCommentToReview,
+    removeComment
 } = require('../models/comments.model');
 
 exports.getReviewComments = (req, res, next) => {
-    console.log(req.params)
     let id = (req.params.review_id);
     fetchAllReviewComments(id)
     .then((reviews) => {
@@ -21,4 +21,15 @@ exports.postReviewComment = (req, res, next) => {
     .then((comment) => {
         res.status(201).send({comment})
     })
+    .catch(next)
+}
+
+exports.deleteComment = (req, res, next) => {
+    console.log(req.params)
+    let id = req.params.comment_id
+    removeComment(id)
+    .then(() => {
+        res.status(204).send({msg: 'comment deleted'})
+    })
+    .catch(next)
 }

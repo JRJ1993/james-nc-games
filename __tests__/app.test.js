@@ -264,7 +264,6 @@ describe('Get', () => {
         .get('/api/reviews/99/comments')
         .expect(404)
         .then(({body}) => {
-            console.log(body)
             expect(body).toEqual({msg:'review input must be a valid number'});
         })
     })
@@ -274,7 +273,6 @@ describe('Get', () => {
         .get('/api/reviews/1/coments')
         .expect(404)
         .then(({body}) => {
-            console.log(body)
             expect(body).toEqual({msg:'Route not found'});
         })
     });
@@ -284,17 +282,9 @@ describe('Get', () => {
         .get('/api/reviews/bub/comments')
         .expect(400)
         .then(({body}) => {
-            console.log(body)
             expect(body).toEqual({msg:'review input must be in the form of a valid number'});
         })
     });
-
-    
-
-
-
-    
-    
 });
 
 describe('Patch', () => {
@@ -354,21 +344,85 @@ describe('Patch', () => {
     });
 });
 
-describe.only('Post', () => {
+describe('Post', () => {
     test('should show the good path works', () => {
         let newComment = {
             username: "mallionaire",
             body: "I am great at this game so it must be amazing as i dont play bad games that i suck at."
         };
+
         return request(app)
         .post('/api/reviews/1/comments')
         .send(newComment)
         .expect(201)
         .then (({body}) => {
-            console.log(body.comment.rows)
-            expect(body.comments.length).toBe(4)
+            expect(body.comment.rows[0]).toMatchObject({
+                comment_id:expect.any(Number),
+                author: expect.any(String),
+                review_id: expect.any(Number),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+                body: expect.any(String)
+            })
+        })
+    });
+
+    test('should show the bad path works', () => {
+        let newComment = {
+            username: "mallionaire",
+            body: "I am great at this game so it must be amazing as i dont play bad games that i suck at."
+        };
+
+        return request(app)
+        .post('/api/reviews/1/commnts')
+        .send(newComment)
+        .expect(404)
+        .then (({body}) => {
+            expect(body).toEqual({msg: 'Route not found'});
+        })
+    });
+
+    test('should show the bad path works', () => {
+        let newComment = {
+            username: "mallionaire",
+            body: "I am great at this game so it must be amazing as i dont play bad games that i suck at."
+        };
+
+        return request(app)
+        .post('/api/reviews/99/comments')
+        .send(newComment)
+        .expect(400)
+        .then (({body}) => {
+            expect(body).toEqual({msg: 'Invalid request'});
         })
     });
 });
 
+describe('Delete', () => {
+    test('should delete a comment', () => {
+        return request(app)
+        .delete('/api/comments/1')
+        .expect(204)
+        .then (({body}) => {
+            expect(body).toEqual({});
+        })
+    });
 
+    test('should delete a comment', () => {
+        return request(app)
+        .delete('/api/commets/1')
+        .expect(404)
+        .then (({body}) => {
+            expect(body).toEqual({"msg": "Route not found"});
+        })
+    });
+
+    test('should delete a comment', () => {
+        return request(app)
+        .delete('/api/comments/bad')
+        .expect(400)
+        .then (({body}) => {
+            expect(body).toEqual({msg:'review input must be in the form of a valid number'});
+        })
+    });
+});
