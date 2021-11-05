@@ -12,9 +12,7 @@ exports.getReviews = (req, res, next) => {
     })
     .catch(next)
 }
-
 exports.getAllReviews = (req, res, next) => {
-
     let query = req.query.order_by;
     let order;
     if (req.query.order) {
@@ -27,8 +25,6 @@ exports.getAllReviews = (req, res, next) => {
     })
     .catch(next)
 }
-
-
 exports.patchReviews = (req, res, next) => {
     let id = req.params;
     let update = req.body

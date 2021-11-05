@@ -19,12 +19,10 @@ exports.fetchAllReviewComments = async (id) => {
     }
     return comments.rows
 }
-
 exports.addCommentToReview = async (id, username, comment) => {
     let addComment  = await db.query('INSERT INTO comments (author, body, review_id) VALUES ($1, $2, $3) RETURNING*;', [username, comment, id])
     return addComment
 }
-
 exports.removeComment = async (id) => {
     if(isNaN(id)) {
         return Promise.reject({status:400, msg:'review input must be in the form of a valid number'})
