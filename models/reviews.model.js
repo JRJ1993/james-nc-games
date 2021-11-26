@@ -27,25 +27,27 @@ exports.updateReviews = async (id, updates) => {
         if (result.rows.length === 0) {
             return Promise.reject({status:404, msg:'review not found'})
         }
-    }
+    } 
     let currentVote = await db.query(`SELECT votes FROM reviews WHERE review_id = $1`, [id.review_id]);
     let newVotes = currentVote.rows[0].votes + updates.inc_votes;
     let queryStr = `UPDATE reviews SET votes = $1 WHERE review_id = $2 RETURNING*`
     let updateVotes = await db.query(queryStr, [newVotes, id.review_id]);
     return updateVotes.rows[0];
 }
-exports.fetchAllReviews = async (order_by = 'created_at', order = 'DESC', category, req) => {
-    if (order !== 'ASC' && order !== 'DESC' ) {
+exports.fetchAllReviews = async (order_by = 'created_at', sort_by, category, req) => {
+    console.log(order_by, sort_by, category, req)
+    if (sort_by !== 'ASC' && sort_by !== 'DESC' ) {
+        console.log('why')
         return Promise.reject({status:400, msg: 'Invalid order input'})
     }
-    if (Object.keys(req).length !== 0 && !req.hasOwnProperty('order_by') && !req.hasOwnProperty('order') && !req.hasOwnProperty('category')) {
+    if (Object.keys(req).length !== 0 && !req.hasOwnProperty('order_by') && !req.hasOwnProperty('sort_by') && !req.hasOwnProperty('category')) {
         return Promise.reject({status: 400, msg: 'there is nothing for that query'})
     }
     let queryStr = `SELECT * FROM reviews`
     if (category !== undefined) {
         queryStr += ` WHERE category = '${category}'`
     }
-    queryStr += ` ORDER BY ${order_by} ${order}`
+    queryStr += ` ORDER BY ${order_by} ${sort_by}`
     let allReviews = await db.query(queryStr);
     if (allReviews.rows.length === 0) {
         return Promise.reject({status:400, msg: 'there is nothing for that query'})
